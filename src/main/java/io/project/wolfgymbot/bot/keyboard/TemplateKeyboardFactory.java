@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemplateKeyboardFactory {
+public class TemplateKeyboardFactory{
 
     // Метод для создания меню шаблонов тренировок
     public static ReplyKeyboardMarkup createTemplatesMenu() {

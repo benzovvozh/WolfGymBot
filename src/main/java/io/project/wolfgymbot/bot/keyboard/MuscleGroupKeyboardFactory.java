@@ -1,14 +1,13 @@
 package io.project.wolfgymbot.bot.keyboard;
 
 import io.project.wolfgymbot.client.MuscleGroup;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MuscleGoupKeyboardFactory {
+public class MuscleGroupKeyboardFactory {
 
     public static InlineKeyboardMarkup createMuscleGroupsKeyboard() {
         InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup();

@@ -1,7 +1,6 @@
 package io.project.wolfgymbot.bot.keyboard;
 
 
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -9,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeyboardFactory {
+public class CommonKeyboardFactory{
 
     // Метод для создания главного меню
     public static ReplyKeyboardMarkup createMainMenu() {

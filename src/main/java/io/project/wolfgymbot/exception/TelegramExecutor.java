@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
@@ -20,6 +21,15 @@ public class TelegramExecutor {
         this.bot = bot;
     }
 
+    // метод отправки сообщения с установкой клавиатуры
+    public void sendMessage(Long chatId,
+                                   String text,
+                                   String userNickname,
+                                   ReplyKeyboard keyboard) {
+        SendMessage message = new SendMessage(chatId.toString(), text);
+        message.setReplyMarkup(keyboard);
+        executeWithErrorHandling(message, chatId, "sendMessage", userNickname);
+    }
     // метод отправки сообщения
     public void sendMessage(Long chatId, String text, String userNickname) {
         SendMessage message = new SendMessage(chatId.toString(), text);
