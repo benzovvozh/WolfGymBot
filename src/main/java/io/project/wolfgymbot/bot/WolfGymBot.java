@@ -1,9 +1,15 @@
 package io.project.wolfgymbot.bot;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import io.project.wolfgymbot.bot.keyboard.ExerciseKeyboardFactory;
+import io.project.wolfgymbot.bot.keyboard.KeyboardFactory;
+import io.project.wolfgymbot.bot.keyboard.MuscleGoupKeyboardFactory;
+import io.project.wolfgymbot.bot.keyboard.TemplateKeyboardFactory;
 import io.project.wolfgymbot.client.dto.ExerciseDTO;
+import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.service.ExerciseService;
 import io.project.wolfgymbot.service.WorkoutTemplateService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -21,11 +27,14 @@ public class WolfGymBot extends TelegramLongPollingBot {
 
     private final ExerciseService exerciseService;
     private final WorkoutTemplateService workoutTemplateService;
+    private final TelegramExecutor telegramExecutor;
 
-    public WolfGymBot(ExerciseService exerciseService, WorkoutTemplateService workoutTemplateService) {
+    public WolfGymBot(ExerciseService exerciseService, WorkoutTemplateService workoutTemplateService,
+                      @Lazy TelegramExecutor telegramExecutor) {
         super(getBotTokenFromEnv());
         this.workoutTemplateService = workoutTemplateService;
         this.exerciseService = exerciseService;
+        this.telegramExecutor = telegramExecutor;
     }
 
     private static String getBotTokenFromEnv() {
@@ -56,6 +65,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
     private void handleTextMessage(Message message) {
         String messageText = message.getText();  // Получаем текст сообщения
         Long chatId = message.getChatId();       // Получаем ID чата
+        String userNickname = message.getFrom().getUserName();
 
         // Обрабатываем разные команды меню
         switch (messageText) {
@@ -81,7 +91,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
                 showAllExercisesWithSelection(chatId);  // Показываем упражнения с inline кнопками
                 break;
             case "➕ Create Exercise":
-                createExercise(chatId);
+                createExercise(chatId, userNickname);
                 break;
             case "💪 By Muscle Group":
                 showMuscleGroupsMenu(chatId);  // Показываем меню групп мышц
@@ -95,10 +105,10 @@ public class WolfGymBot extends TelegramLongPollingBot {
                 startWorkout(chatId);  // Начинаем тренировку
                 break;
             case "\uD83D\uDCCA Progress":
-                featureInProgress(chatId);
+                featureInProgress(chatId, userNickname);
                 break;
             case "ℹ\uFE0F Help":
-                featureInProgress(chatId);
+                featureInProgress(chatId, userNickname);
                 break;
             default:
                 showMainMenu(chatId);  // По умолчанию показываем главное меню
@@ -106,24 +116,14 @@ public class WolfGymBot extends TelegramLongPollingBot {
         }
     }
 
-    private void featureInProgress(Long chatId) {
-        SendMessage sendMessage = new SendMessage(chatId.toString(),
-                "Данный функционал находится в разработке");
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+    private void featureInProgress(Long chatId, String userNickname) {
+        telegramExecutor.sendMessage(chatId, "Кнопка в процессе разработки", userNickname);
+
     }
 
-    private void createExercise(Long chatId) {
+    private void createExercise(Long chatId, String userNickname) {
         String message = "Напишите упражнение";
-        SendMessage sendMessage = new SendMessage(chatId.toString(), message);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        telegramExecutor.sendMessage(chatId,message, userNickname);
     }
 
     // Метод для показа главного меню
@@ -161,7 +161,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
                 """;
 
         SendMessage message = new SendMessage(chatId.toString(), exercisesText);
-        message.setReplyMarkup(KeyboardFactory.createExercisesMenu()); // Устанавливаем меню упражнений
+        message.setReplyMarkup(ExerciseKeyboardFactory.createExercisesMenu()); // Устанавливаем меню упражнений
 
         try {
             execute(message);
@@ -183,7 +183,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
                 """;
 
         SendMessage message = new SendMessage(chatId.toString(), templatesText);
-        message.setReplyMarkup(KeyboardFactory.createTemplatesMenu()); // Устанавливаем меню шаблонов
+        message.setReplyMarkup(TemplateKeyboardFactory.createTemplatesMenu()); // Устанавливаем меню шаблонов
 
         try {
             execute(message);
@@ -203,7 +203,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
 
         SendMessage message = new SendMessage(chatId.toString(), messageText);
         message.setParseMode("HTML");
-        message.setReplyMarkup(KeyboardFactory.createMuscleGroupsKeyboard());
+        message.setReplyMarkup(MuscleGoupKeyboardFactory.createMuscleGroupsKeyboard());
 
         try {
             execute(message);
@@ -225,7 +225,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
             String messageText = "🏋️ Выберите шаблон для просмотра:\n\n";
 
             SendMessage message = new SendMessage(chatId.toString(), messageText);
-            message.setReplyMarkup(KeyboardFactory.createWorkoutTemplatesInlineKeyboard(templates));
+            message.setReplyMarkup(TemplateKeyboardFactory.createWorkoutTemplatesInlineKeyboard(templates));
 
             execute(message);  // Отправляем сообщение с inline кнопками
 
@@ -252,7 +252,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
         else if (callbackData.startsWith("muscle_group_")) {
             String muscleGroup = callbackData.substring(13); // получаем группу мышц
             List<ExerciseDTO> exerciseByMuscleGroupList = exerciseService.getExercisesByMuscleGroup(muscleGroup);
-            showAllExercisesByMuscleGroupWithSelection(chatId, exerciseByMuscleGroupList);            
+            showAllExercisesByMuscleGroupWithSelection(chatId, exerciseByMuscleGroupList);
         }
         // Обрабатываем кнопку "Назад к списку"
         else if ("exercise_back".equals(callbackData)) {
@@ -275,7 +275,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
 
             SendMessage message = new SendMessage(chatId.toString(), messageText);
             // Устанавливаем inline клавиатуру с упражнениями
-            message.setReplyMarkup(KeyboardFactory.createExercisesInlineKeyboard(list));
+            message.setReplyMarkup(ExerciseKeyboardFactory.createExercisesInlineKeyboard(list));
 
             execute(message);  // Отправляем сообщение с inline кнопками
 
@@ -311,7 +311,7 @@ public class WolfGymBot extends TelegramLongPollingBot {
 
             SendMessage message = new SendMessage(chatId.toString(), messageText);
             // Устанавливаем inline клавиатуру с упражнениями
-            message.setReplyMarkup(KeyboardFactory.createExercisesInlineKeyboard(exercises));
+            message.setReplyMarkup(ExerciseKeyboardFactory.createExercisesInlineKeyboard(exercises));
 
             execute(message);  // Отправляем сообщение с inline кнопками
 
