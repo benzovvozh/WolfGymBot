@@ -4,13 +4,14 @@ import io.project.wolfgymbot.client.WorkoutApiClient;
 import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ExerciseService {
 
     private final WorkoutApiClient apiClient;
@@ -35,16 +36,19 @@ public class ExerciseService {
             ExerciseDTO exercise = getExerciseByName(exerciseName);
 
             if (exercise == null) {
-                // Если упражнение не найдено, показываем сообщение
+                log.info("Упражнение {} не найдено", exerciseName);
                 telegramExecutor.sendMessage(chatId, "Упражнение не найдено", userNickname);
+
             } else {
                 // Форматируем детальную информацию об упражнении
+                log.info("Упражнение {} найдено", exerciseName);
                 String exerciseDetails = formatExerciseDetails(exercise);
                 telegramExecutor.sendMessage(chatId, exerciseDetails,userNickname);
+
             }
         } catch (Exception e) {
+            log.info("Ошибка в методе showExerciseDetails -> ExerciseService");
             telegramExecutor.sendMessage(chatId, "❌ Ошибка при загрузке информации об упражнении", userNickname);
-            e.printStackTrace();  // Логируем ошибку
         }
     }
 

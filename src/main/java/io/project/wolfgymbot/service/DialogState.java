@@ -1,0 +1,10 @@
+package io.project.wolfgymbot.service;
+
+public enum DialogState {
+    WAITING_EXERCISE_NAME_FOR_SEARCH,
+    WAITING_EXERCISE_NAME,
+    WAITING_EXERCISE_DESC,
+    WAITING_EXERCISE_VIDEO_URL,
+    WAITING_EXERCISE_MUSCLE_GROUP,
+    EMPTY
+}

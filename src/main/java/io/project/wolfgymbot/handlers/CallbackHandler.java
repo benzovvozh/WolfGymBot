@@ -5,9 +5,7 @@ import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.keyboard.ExerciseKeyboardFactory;
 import io.project.wolfgymbot.service.ExerciseService;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
@@ -36,8 +34,13 @@ public class CallbackHandler {
         else if (callbackData.startsWith("muscle_group_")) {
             String muscleGroup = callbackData.substring(13); // получаем группу мышц
             List<ExerciseDTO> exerciseByMuscleGroupList = exerciseService.getExercisesByMuscleGroup(muscleGroup);
-            var keyboard = ExerciseKeyboardFactory.createExercisesInlineKeyboard(exerciseByMuscleGroupList);
-            telegramExecutor.sendMessage(chatId, "Выберите упражнение из списка:", userNickname, keyboard);
+            if (exerciseByMuscleGroupList.isEmpty()) {
+                String exercisesNotFound = "Упражнений по группе мышц: " + muscleGroup + " не найдено";
+                telegramExecutor.sendMessage(chatId, exercisesNotFound, userNickname);
+            } else {
+                var keyboard = ExerciseKeyboardFactory.createExercisesInlineKeyboard(exerciseByMuscleGroupList);
+                telegramExecutor.sendMessage(chatId, "Выберите упражнение из списка:", userNickname, keyboard);
+            }
 
         }
         // Обрабатываем кнопку "Назад к списку"
