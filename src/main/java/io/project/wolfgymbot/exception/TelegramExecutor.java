@@ -3,10 +3,12 @@ package io.project.wolfgymbot.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -16,12 +18,10 @@ public class TelegramExecutor {
     private TelegramLongPollingBot bot;
     private static final Logger log = LoggerFactory.getLogger(TelegramExecutor.class);
 
-    @Autowired
-    public void setBot(TelegramLongPollingBot bot) {
+    public TelegramExecutor(@Lazy TelegramLongPollingBot bot) {
         this.bot = bot;
     }
-
-    // метод отправки сообщения с установкой клавиатуры
+    // метод создания сообщения с установкой клавиатуры
     public void sendMessage(Long chatId,
                                    String text,
                                    String userNickname,
@@ -30,12 +30,11 @@ public class TelegramExecutor {
         message.setReplyMarkup(keyboard);
         executeWithErrorHandling(message, chatId, "sendMessage", userNickname);
     }
-    // метод отправки сообщения
+    // метод создания сообщения
     public void sendMessage(Long chatId, String text, String userNickname) {
         SendMessage message = new SendMessage(chatId.toString(), text);
         executeWithErrorHandling(message, chatId, "sendMessage", userNickname);
     }
-
     /*
     Метод для отправки сообщений с обработкой ошибок
     Принимает:
@@ -62,18 +61,20 @@ public class TelegramExecutor {
         }
     }
 
-    //Классификация ошибок, именно АПИ ТГ
+    // Классификация ошибок, именно АПИ ТГ
     private TelegramErrorType classifyError(TelegramApiException e) {
         String errorMessage = e.getMessage();
         if (errorMessage.contains("400")) {
             return TelegramErrorType.UNKNOWN_ERROR;
         }
-
         return null;
     }
 
-    private void handleErrorBasedOnType(TelegramErrorType errorType, TelegramApiException e,
-                                        Long chatId, String methodName) {
+    // обработка ошибок тг
+    private void handleErrorBasedOnType(TelegramErrorType errorType,
+                                        TelegramApiException e,
+                                        Long chatId,
+                                        String methodName) {
         switch (errorType) {
             case UNKNOWN_ERROR -> {
                 sendErrorMessageToUser(chatId, "Неизвестная ошибка");
@@ -83,6 +84,7 @@ public class TelegramExecutor {
         }
     }
 
+    // отправка сообщения об ошибке
     private void sendErrorMessageToUser(Long chatId, String errorText) {
         try {
             SendMessage errorMessage = new SendMessage(chatId.toString(),
@@ -90,6 +92,16 @@ public class TelegramExecutor {
             bot.execute(errorMessage);
         } catch (TelegramApiException ex) {
             log.error("Не удалось отправить сообщение об ошибке пользователю {}", chatId, ex);
+        }
+    }
+
+    // Вспомогательный метод для удаления сообщения
+    public void deleteMessage(Long chatId, Integer messageId) {
+        DeleteMessage deleteMessage = new DeleteMessage(chatId.toString(), messageId);
+        try {
+            bot.execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 

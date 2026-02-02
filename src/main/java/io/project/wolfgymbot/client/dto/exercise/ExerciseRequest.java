@@ -1,17 +1,16 @@
-package io.project.wolfgymbot.client.dto;
+package io.project.wolfgymbot.client.dto.exercise;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class ExerciseDTO {
+public class ExerciseRequest {
+    @NotNull
     private String name;
     private String description;
+    @NotNull
     private String muscleGroup;
     private String videoUrl;
-    private LocalDateTime createdAt;
-
 }

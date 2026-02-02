@@ -1,6 +1,6 @@
 package io.project.wolfgymbot.client;
 
-import io.project.wolfgymbot.client.dto.ExerciseDTO;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import io.project.wolfgymbot.client.dto.template.WorkoutTemplateDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

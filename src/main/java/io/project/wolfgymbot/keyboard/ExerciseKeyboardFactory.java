@@ -1,6 +1,6 @@
-package io.project.wolfgymbot.bot.keyboard;
+package io.project.wolfgymbot.keyboard;
 
-import io.project.wolfgymbot.client.dto.ExerciseDTO;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ExerciseKeyboardFactory{
 
     // Метод для создания меню упражнений
@@ -75,7 +76,7 @@ public class ExerciseKeyboardFactory{
         List<InlineKeyboardButton> backRow = new ArrayList<>();
         InlineKeyboardButton backButton = new InlineKeyboardButton();
         backButton.setText("⬅️ Назад к списку");  // Текст кнопки назад
-        backButton.setCallbackData("exercise_back");  // Callback данные для кнопки назад
+        backButton.setCallbackData("back");  // Callback данные для кнопки назад
         backRow.add(backButton);
         rows.add(backRow);
 

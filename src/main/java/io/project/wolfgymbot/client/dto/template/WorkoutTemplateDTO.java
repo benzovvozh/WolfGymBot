@@ -1,6 +1,6 @@
 package io.project.wolfgymbot.client.dto.template;
 
-import io.project.wolfgymbot.client.dto.ExerciseDTO;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import lombok.Getter;
 import lombok.Setter;
 

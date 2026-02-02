@@ -1,9 +1,11 @@
 package io.project.wolfgymbot.service;
 
 import io.project.wolfgymbot.client.WorkoutApiClient;
-import io.project.wolfgymbot.client.dto.ExerciseDTO;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
+import io.project.wolfgymbot.exception.TelegramExecutor;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
 public class ExerciseService {
 
     private final WorkoutApiClient apiClient;
+    private final TelegramExecutor telegramExecutor;
 
     public List<ExerciseDTO> getAllExercises() {
         return apiClient.getExercises();
@@ -24,5 +27,44 @@ public class ExerciseService {
 
     public List<ExerciseDTO> getExercisesByMuscleGroup(String muscleGroup) {
         return apiClient.getExercisesByMuscleGroup(muscleGroup);
+    }
+
+    public void showExerciseDetails(Long chatId,String exerciseName, String userNickname) {
+        try {
+            // Получаем упражнение по названию через сервис
+            ExerciseDTO exercise = getExerciseByName(exerciseName);
+
+            if (exercise == null) {
+                // Если упражнение не найдено, показываем сообщение
+                telegramExecutor.sendMessage(chatId, "Упражнение не найдено", userNickname);
+            } else {
+                // Форматируем детальную информацию об упражнении
+                String exerciseDetails = formatExerciseDetails(exercise);
+                telegramExecutor.sendMessage(chatId, exerciseDetails,userNickname);
+            }
+        } catch (Exception e) {
+            telegramExecutor.sendMessage(chatId, "❌ Ошибка при загрузке информации об упражнении", userNickname);
+            e.printStackTrace();  // Логируем ошибку
+        }
+    }
+
+    // Отправляем красивое сообщение упражнения
+    private String formatExerciseDetails(ExerciseDTO exercise) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("🏋️ <b>").append(exercise.getName()).append("</b>\n\n");  // Название упражнения
+
+        if (exercise.getDescription() != null && !exercise.getDescription().isEmpty()) {
+            sb.append("📝 ").append(exercise.getDescription()).append("\n\n");  // Описание
+        }
+
+        if (exercise.getMuscleGroup() != null) {
+            sb.append("💪 Группа мышц: ").append(exercise.getMuscleGroup()).append("\n");  // Группа мышц
+        }
+
+        if (exercise.getVideoUrl() != null && !exercise.getVideoUrl().isEmpty()) {
+            sb.append("🎥 Видео: ").append(exercise.getVideoUrl()).append("\n");  // Ссылка на видео
+        }
+
+        return sb.toString();  // Возвращаем отформатированную строку
     }
 }

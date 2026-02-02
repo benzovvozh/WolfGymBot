@@ -1,12 +1,14 @@
-package io.project.wolfgymbot.bot.keyboard;
+package io.project.wolfgymbot.keyboard;
 
 import io.project.wolfgymbot.client.MuscleGroup;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class MuscleGroupKeyboardFactory {
 
     public static InlineKeyboardMarkup createMuscleGroupsKeyboard() {
@@ -44,7 +46,7 @@ public class MuscleGroupKeyboardFactory {
         List<InlineKeyboardButton> backRow = new ArrayList<>();
         InlineKeyboardButton backButton = new InlineKeyboardButton();
         backButton.setText("⬅️ Назад");
-        backButton.setCallbackData("muscle_group_back");
+        backButton.setCallbackData("back");
         backRow.add(backButton);
         rows.add(backRow);
 
