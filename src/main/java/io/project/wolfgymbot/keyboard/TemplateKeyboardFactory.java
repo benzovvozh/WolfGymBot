@@ -15,7 +15,7 @@ import java.util.List;
 public class TemplateKeyboardFactory{
 
     // Метод для создания меню шаблонов тренировок
-    public static ReplyKeyboardMarkup createTemplatesMenu() {
+    public ReplyKeyboardMarkup createTemplatesMenu() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);
         keyboardMarkup.setOneTimeKeyboard(false);
@@ -41,7 +41,7 @@ public class TemplateKeyboardFactory{
         return keyboardMarkup;
     }
 
-    public static InlineKeyboardMarkup createWorkoutTemplatesInlineKeyboard(List<WorkoutTemplateDTO> templates) {
+    public InlineKeyboardMarkup createWorkoutTemplatesInlineKeyboard(List<WorkoutTemplateDTO> templates) {
         InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 

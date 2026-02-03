@@ -32,6 +32,15 @@ public class WorkoutApiClient {
                 .block();
     }
 
+    public WorkoutTemplateDTO getWorkoutTemplateByName(String name) {
+        var result = webClient.get()
+                .uri(WT_PATH + "/search" + "?name=" + name)
+                .retrieve()
+                .bodyToMono(WorkoutTemplateDTO.class)
+                .block();
+        return result;
+    }
+
     public List<ExerciseDTO> getExercises() {
         return webClient.get()
                 .uri(EX_PATH)

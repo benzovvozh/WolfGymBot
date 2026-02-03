@@ -21,4 +21,8 @@ public class DialogStateService {
         log.info("Очищаем состояние диалога");
         userStates.put(chatId, DialogState.EMPTY);
     }
+    public void startCreateExercise(Long chatId){
+        userStates.put(chatId, DialogState.WAITING_EXERCISE_NAME);
+    }
+
 }

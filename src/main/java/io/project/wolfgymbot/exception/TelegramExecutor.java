@@ -2,7 +2,6 @@ package io.project.wolfgymbot.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -27,12 +26,14 @@ public class TelegramExecutor {
                                    String userNickname,
                                    ReplyKeyboard keyboard) {
         SendMessage message = new SendMessage(chatId.toString(), text);
+        message.setParseMode("HTML");
         message.setReplyMarkup(keyboard);
         executeWithErrorHandling(message, chatId, "sendMessage", userNickname);
     }
     // метод создания сообщения
     public void sendMessage(Long chatId, String text, String userNickname) {
         SendMessage message = new SendMessage(chatId.toString(), text);
+        message.setParseMode("HTML");
         executeWithErrorHandling(message, chatId, "sendMessage", userNickname);
     }
     /*

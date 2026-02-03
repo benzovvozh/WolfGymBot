@@ -30,30 +30,33 @@ public class ExerciseService {
         return apiClient.getExercisesByMuscleGroup(muscleGroup);
     }
 
-    public void showExerciseDetails(Long chatId,String exerciseName, String userNickname) {
+    public void showExerciseDetails(Long chatId, String exerciseName, String userNickname) {
         try {
             // Получаем упражнение по названию через сервис
             ExerciseDTO exercise = getExerciseByName(exerciseName);
 
             if (exercise == null) {
-                log.info("Упражнение {} не найдено", exerciseName);
+                log.info("ExerciseService -> showExerciseDetails -> Упражнение {} не найдено, для пользователя {}",
+                        exerciseName, userNickname);
                 telegramExecutor.sendMessage(chatId, "Упражнение не найдено", userNickname);
 
             } else {
                 // Форматируем детальную информацию об упражнении
-                log.info("Упражнение {} найдено", exerciseName);
+                log.info("ExerciseService -> showExerciseDetails -> Упражнение {} найдено, для пользователя {}",
+                        exerciseName, userNickname);
                 String exerciseDetails = formatExerciseDetails(exercise);
-                telegramExecutor.sendMessage(chatId, exerciseDetails,userNickname);
+                telegramExecutor.sendMessage(chatId, exerciseDetails, userNickname);
 
             }
         } catch (Exception e) {
-            log.info("Ошибка в методе showExerciseDetails -> ExerciseService");
+            log.info("Ошибка в методе ExerciseService -> showExerciseDetails");
             telegramExecutor.sendMessage(chatId, "❌ Ошибка при загрузке информации об упражнении", userNickname);
         }
     }
 
     // Отправляем красивое сообщение упражнения
     private String formatExerciseDetails(ExerciseDTO exercise) {
+        log.info("ExerciseService -> formatExerciseDetails -> Начало форматирования деталей упражнения");
         StringBuilder sb = new StringBuilder();
         sb.append("🏋️ <b>").append(exercise.getName()).append("</b>\n\n");  // Название упражнения
 
@@ -68,7 +71,7 @@ public class ExerciseService {
         if (exercise.getVideoUrl() != null && !exercise.getVideoUrl().isEmpty()) {
             sb.append("🎥 Видео: ").append(exercise.getVideoUrl()).append("\n");  // Ссылка на видео
         }
-
+        log.info("ExerciseService -> formatExerciseDetails -> Форматирование деталей сообщения успешно");
         return sb.toString();  // Возвращаем отформатированную строку
     }
 }

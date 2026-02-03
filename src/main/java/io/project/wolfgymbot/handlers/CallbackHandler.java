@@ -4,6 +4,7 @@ import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.keyboard.ExerciseKeyboardFactory;
 import io.project.wolfgymbot.service.ExerciseService;
+import io.project.wolfgymbot.service.WorkoutTemplateService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public class CallbackHandler {
     private final ExerciseService exerciseService;
     private final TelegramExecutor telegramExecutor;
+    private final WorkoutTemplateService workoutTemplateService;
 
-    public CallbackHandler(ExerciseService exerciseService, TelegramExecutor telegramExecutor) {
+    public CallbackHandler(ExerciseService exerciseService, TelegramExecutor telegramExecutor, WorkoutTemplateService workoutTemplateService) {
         this.exerciseService = exerciseService;
         this.telegramExecutor = telegramExecutor;
+        this.workoutTemplateService = workoutTemplateService;
     }
 
     public void handleCallbackQuery(CallbackQuery callbackQuery) {
@@ -32,7 +35,7 @@ public class CallbackHandler {
         }
         // поиск упражнений по группе мышц
         else if (callbackData.startsWith("muscle_group_")) {
-            String muscleGroup = callbackData.substring(13); // получаем группу мышц
+            String muscleGroup = callbackData.substring("muscle_group_".length()); // получаем группу мышц
             List<ExerciseDTO> exerciseByMuscleGroupList = exerciseService.getExercisesByMuscleGroup(muscleGroup);
             if (exerciseByMuscleGroupList.isEmpty()) {
                 String exercisesNotFound = "Упражнений по группе мышц: " + muscleGroup + " не найдено";
@@ -41,6 +44,13 @@ public class CallbackHandler {
                 var keyboard = ExerciseKeyboardFactory.createExercisesInlineKeyboard(exerciseByMuscleGroupList);
                 telegramExecutor.sendMessage(chatId, "Выберите упражнение из списка:", userNickname, keyboard);
             }
+
+        }
+        // Выбор шаблона тренировок
+        else if (callbackData.startsWith("workout_template_select_")) {
+            String templateName = callbackData.substring("workout_template_select_".length());
+            workoutTemplateService.showTemplateDetails(chatId, templateName, userNickname);
+
 
         }
         // Обрабатываем кнопку "Назад к списку"

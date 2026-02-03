@@ -1,5 +1,6 @@
-package io.project.wolfgymbot.commands;
+package io.project.wolfgymbot.commands.templateCommands;
 
+import io.project.wolfgymbot.commands.BotCommand;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.keyboard.TemplateKeyboardFactory;
 import io.project.wolfgymbot.service.WorkoutTemplateService;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Component;
 public class TemplatesMenuCommand implements BotCommand {
     private final TelegramExecutor telegramExecutor;
     private final WorkoutTemplateService workoutTemplateService;
+    private final TemplateKeyboardFactory templateKeyboardFactory;
 
-    public TemplatesMenuCommand(TelegramExecutor telegramExecutor, WorkoutTemplateService workoutTemplateService) {
+    public TemplatesMenuCommand(TelegramExecutor telegramExecutor, WorkoutTemplateService workoutTemplateService, TemplateKeyboardFactory templateKeyboardFactory) {
         this.telegramExecutor = telegramExecutor;
         this.workoutTemplateService = workoutTemplateService;
+        this.templateKeyboardFactory = templateKeyboardFactory;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class TemplatesMenuCommand implements BotCommand {
                 • 📊 My Workouts - мои тренировки
                 """;
 
-        var keyboard = TemplateKeyboardFactory.createTemplatesMenu();
+        var keyboard = templateKeyboardFactory.createTemplatesMenu();
         telegramExecutor.sendMessage(chatId, templatesText, userNickname, keyboard);
 
     }
@@ -50,7 +53,7 @@ public class TemplatesMenuCommand implements BotCommand {
         }
         // Форматируем сообщение со списком
         String messageText = "🏋️ Выберите шаблон для просмотра:\n\n";
-        var keyboard = TemplateKeyboardFactory.createWorkoutTemplatesInlineKeyboard(templates);
+        var keyboard = templateKeyboardFactory.createWorkoutTemplatesInlineKeyboard(templates);
         telegramExecutor.sendMessage(chatId, messageText, userNickname, keyboard);
     }
 }

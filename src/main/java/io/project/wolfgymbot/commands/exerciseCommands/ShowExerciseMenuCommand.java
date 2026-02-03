@@ -1,16 +1,10 @@
 package io.project.wolfgymbot.commands.exerciseCommands;
 
-import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import io.project.wolfgymbot.commands.BotCommand;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.keyboard.ExerciseKeyboardFactory;
-import io.project.wolfgymbot.keyboard.MuscleGroupKeyboardFactory;
 import io.project.wolfgymbot.service.ExerciseService;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-
-import java.util.List;
 
 @Component
 public class ShowExerciseMenuCommand implements BotCommand {

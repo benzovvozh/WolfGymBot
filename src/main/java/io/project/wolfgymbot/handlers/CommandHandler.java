@@ -1,7 +1,6 @@
 package io.project.wolfgymbot.handlers;
 
 import io.project.wolfgymbot.commands.BotCommand;
-import io.project.wolfgymbot.handlers.dialog.DialogStateHandler;
 import io.project.wolfgymbot.handlers.dialog.DialogStateHandlerRegistry;
 import io.project.wolfgymbot.service.DialogState;
 import io.project.wolfgymbot.service.DialogStateService;
