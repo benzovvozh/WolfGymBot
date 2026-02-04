@@ -1,5 +1,6 @@
 package io.project.wolfgymbot.handlers;
 
+import io.project.wolfgymbot.client.dto.exercise.MapDraftExerciseStorage;
 import io.project.wolfgymbot.commands.BotCommand;
 import io.project.wolfgymbot.handlers.dialog.DialogStateHandlerRegistry;
 import io.project.wolfgymbot.service.DialogState;
@@ -18,7 +19,8 @@ public class CommandHandler {
     private final DialogStateHandlerRegistry dialogStateHandlerRegistry;
     private final DialogStateService dialogStateService;
 
-    public CommandHandler(CommandRegistry commandRegistry, DialogStateHandlerRegistry dialogStateHandlerRegistry, DialogStateService dialogStateService) {
+    public CommandHandler(CommandRegistry commandRegistry, DialogStateHandlerRegistry dialogStateHandlerRegistry,
+                          DialogStateService dialogStateService) {
         this.commandRegistry = commandRegistry;
         this.dialogStateHandlerRegistry = dialogStateHandlerRegistry;
         this.dialogStateService = dialogStateService;
@@ -28,6 +30,7 @@ public class CommandHandler {
         String messageText = message.getText();
         Long chatId = message.getChatId();
         String userNickname = message.getFrom().getUserName();
+        Long userId = message.getFrom().getId();
 
         DialogState state = dialogStateService.getUserState(chatId);
         log.info("Состояние диалога: {}, для пользователя {}", state, userNickname);
@@ -35,16 +38,18 @@ public class CommandHandler {
         if (state != DialogState.EMPTY) {
             dialogStateHandlerRegistry.getHandler(state)
                     .ifPresent(handler ->
-                            handler.handle(chatId, messageText, userNickname));
-        }
-
-        Optional<BotCommand> cmd = commandRegistry.getCommand(messageText);
-
-        if (cmd.isPresent()) {
-            cmd.get().execute(chatId, userNickname);
+                            handler.handle(chatId, messageText, userNickname, userId));
         } else {
-            commandRegistry.getCommand("/menu")
-                    .ifPresent(command -> command.execute(chatId, userNickname));
+
+            Optional<BotCommand> cmd = commandRegistry.getCommand(messageText);
+
+            if (cmd.isPresent()) {
+                cmd.get().execute(chatId, userNickname);
+            } else {
+                commandRegistry.getCommand("/menu")
+                        .ifPresent(command -> command.execute(chatId, userNickname));
+            }
         }
     }
+
 }

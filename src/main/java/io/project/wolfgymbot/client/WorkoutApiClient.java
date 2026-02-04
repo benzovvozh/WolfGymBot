@@ -1,15 +1,21 @@
 package io.project.wolfgymbot.client;
 
 import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseRequest;
 import io.project.wolfgymbot.client.dto.template.WorkoutTemplateDTO;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.util.List;
 
 @Component
 @AllArgsConstructor
+@Slf4j
 public class WorkoutApiClient {
     private final WebClient webClient;
     private final static String EX_PATH = "/exercises";
@@ -66,5 +72,17 @@ public class WorkoutApiClient {
                 .bodyToFlux(ExerciseDTO.class)
                 .collectList()
                 .block();
+    }
+    public ExerciseDTO createExercise(ExerciseRequest exerciseRequest){
+        log.info("WorkoutApiClient -> createExercise -> отправка запроса на создание упражнения {}",
+                exerciseRequest.getName());
+        ExerciseDTO exerciseDTO = webClient.post()
+                .uri(EX_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(exerciseRequest)
+                .retrieve()
+                .bodyToMono(ExerciseDTO.class)
+                .block(Duration.ofSeconds(10));
+        return exerciseDTO;
     }
 }

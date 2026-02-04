@@ -48,8 +48,6 @@ public class TelegramExecutor {
                                           String methodName, String userNickname) {
         try {
             bot.execute(method);
-            log.info("✅ Успешно: {} для чата {}. Пользователь: {}", methodName, chatId, userNickname);
-
         } catch (TelegramApiException e) {
             // 1. Классифицируем ошибку
             TelegramErrorType errorType = classifyError(e);

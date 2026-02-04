@@ -24,9 +24,9 @@ public class CreateExerciseCommand implements BotCommand {
 
     @Override
     public void execute(Long chatId, String userNickname) {
-        dialogStateService.startCreateExercise(chatId);
-        String messageText = "Введите название упражнения: ";
+        String messageText = "Введите название упражнения.";
         telegramExecutor.sendMessage(chatId, messageText, userNickname);
         log.info("Пользователь {} начал создание упражнения", userNickname);
+        dialogStateService.CreateExerciseWaitName(chatId);
     }
 }

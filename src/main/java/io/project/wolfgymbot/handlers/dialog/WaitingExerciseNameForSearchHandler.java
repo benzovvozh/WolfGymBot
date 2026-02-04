@@ -23,7 +23,7 @@ public class WaitingExerciseNameForSearchHandler implements DialogStateHandler {
     }
 
     @Override
-    public void handle(Long chatId, String userInput, String userNickname) {
+    public void handle(Long chatId, String userInput, String userNickname, Long userId) {
         log.info("Пользователь {} ищет упражнение {}", userNickname, userInput);
         exerciseService.showExerciseDetails(chatId, userInput, userNickname);
         dialogStateService.clearState(chatId);

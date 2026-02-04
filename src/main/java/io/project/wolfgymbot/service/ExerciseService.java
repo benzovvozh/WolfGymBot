@@ -2,6 +2,7 @@ package io.project.wolfgymbot.service;
 
 import io.project.wolfgymbot.client.WorkoutApiClient;
 import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseRequest;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,9 @@ public class ExerciseService {
 
     public List<ExerciseDTO> getExercisesByMuscleGroup(String muscleGroup) {
         return apiClient.getExercisesByMuscleGroup(muscleGroup);
+    }
+    public ExerciseDTO createExercise(ExerciseRequest exerciseRequest){
+        return apiClient.createExercise(exerciseRequest);
     }
 
     public void showExerciseDetails(Long chatId, String exerciseName, String userNickname) {
