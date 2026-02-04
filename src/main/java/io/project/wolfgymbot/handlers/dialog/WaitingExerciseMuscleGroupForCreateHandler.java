@@ -1,5 +1,6 @@
 package io.project.wolfgymbot.handlers.dialog;
 
+import io.project.wolfgymbot.client.MuscleGroup;
 import io.project.wolfgymbot.client.dto.exercise.DraftExercise;
 import io.project.wolfgymbot.client.dto.exercise.MapDraftExerciseStorage;
 import io.project.wolfgymbot.exception.TelegramExecutor;
@@ -34,7 +35,7 @@ public class WaitingExerciseMuscleGroupForCreateHandler implements DialogStateHa
 
         log.info("{}, ввел группу мышц упражнения: {}", userNickname, userInput);
         DraftExercise draftExercise = storage.get(userId);
-        draftExercise.setMuscleGroup(userInput);
+        draftExercise.setMuscleGroup(MuscleGroup.fromDisplayName(userInput).name());
         storage.save(userId, draftExercise);
         dialogStateService.CreateExerciseWaitVideoUrl(chatId);
         String message = "Введите ссылку для упражнения:";

@@ -25,7 +25,24 @@ public enum MuscleGroup {
     public String getDisplayName() {
         return displayName;
     }
+
     public static List<MuscleGroup> getAllGroups() {
         return Arrays.asList(values());
+    }
+
+    public static MuscleGroup fromDisplayName(String displayName) {
+        if (displayName == null) {
+            throw new IllegalArgumentException("Display name cannot be null");
+        }
+
+        // Очистка ввода и приведение к нижнему регистру
+        String cleanedInput = displayName.trim().toLowerCase();
+
+        for (MuscleGroup group : values()) {
+            if (group.getDisplayName().toLowerCase().equals(cleanedInput)) {
+                return group;
+            }
+        }
+        return null;
     }
 }
