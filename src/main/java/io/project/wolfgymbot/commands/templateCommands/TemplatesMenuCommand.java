@@ -24,7 +24,7 @@ public class TemplatesMenuCommand implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         showTemplatesMenu(chatId, userNickname);
     }
 

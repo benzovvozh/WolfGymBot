@@ -23,7 +23,7 @@ public class ShowExerciseMenuCommand implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         showExercisesMenu(chatId, userNickname);
     }
 
@@ -33,7 +33,7 @@ public class ShowExerciseMenuCommand implements BotCommand {
                 🏋️ Управление упражнениями
                 
                 Выберите действие:
-                • 📝 All Exercises - все упражнения
+                • 📝 My Exercises - все упражнения
                 • ➕ Create Exercise - создать новое
                 • 💪 By Muscle Group - по группе мышц
                 • 🔍 Search Exercise - поиск упражнения

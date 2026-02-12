@@ -5,7 +5,6 @@ import io.project.wolfgymbot.client.dto.exercise.MapDraftExerciseStorage;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.service.DialogState;
 import io.project.wolfgymbot.service.DialogStateService;
-import io.project.wolfgymbot.service.ExerciseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +36,8 @@ public class WaitingExerciseDescForCreatingHandler implements DialogStateHandler
         draftExercise.setDescription(userInput);
         storage.save(userId, draftExercise);
         dialogStateService.CreateExerciseWaitMuscleGroup(chatId);
-        String message = "Введите группу мышц упражнения:";
+        String message = "Введите группу мышц упражнения:\n\n- Грудь \n- Руки \n- Спина \n- Ноги \n- Плечи" +
+                         "\n- Пресс \n- Кардио \n- Все тело";
         telegramExecutor.sendMessage(chatId, message,userNickname);
     }
 }

@@ -44,10 +44,10 @@ public class CommandHandler {
             Optional<BotCommand> cmd = commandRegistry.getCommand(messageText);
 
             if (cmd.isPresent()) {
-                cmd.get().execute(chatId, userNickname);
+                cmd.get().execute(chatId, userNickname, userId);
             } else {
                 commandRegistry.getCommand("/menu")
-                        .ifPresent(command -> command.execute(chatId, userNickname));
+                        .ifPresent(command -> command.execute(chatId, userNickname, userId));
             }
         }
     }

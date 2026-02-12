@@ -23,7 +23,7 @@ public class SearchExerciseCommand implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         dialogStateService.startExerciseSearch(chatId);
         String messageText = "Введите название упражнения: ";
         telegramExecutor.sendMessage(chatId, messageText, userNickname);

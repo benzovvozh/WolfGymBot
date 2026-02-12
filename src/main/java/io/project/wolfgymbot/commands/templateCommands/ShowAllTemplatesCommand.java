@@ -28,7 +28,7 @@ public class ShowAllTemplatesCommand implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         List<WorkoutTemplateDTO> templates = workoutTemplateService.getAllTemplates();
         if (templates.isEmpty()) {
             telegramExecutor.sendMessage(chatId, "Шаблонов тренировок пока нет", userNickname);

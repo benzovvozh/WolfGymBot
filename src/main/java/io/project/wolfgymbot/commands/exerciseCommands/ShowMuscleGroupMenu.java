@@ -22,7 +22,7 @@ public class ShowMuscleGroupMenu implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         String text = """
                 💪 <b>Выберите группу мышц</b>
                 

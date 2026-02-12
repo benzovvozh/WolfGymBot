@@ -26,6 +26,9 @@ public class ExerciseService {
         var exercise = apiClient.getExerciseByName(name);
         return exercise;
     }
+    public List<ExerciseDTO> getExercisesByCreatedBy(Long userId){
+        return apiClient.getExercisesByUserId(userId);
+    }
 
     public List<ExerciseDTO> getExercisesByMuscleGroup(String muscleGroup) {
         return apiClient.getExercisesByMuscleGroup(muscleGroup);

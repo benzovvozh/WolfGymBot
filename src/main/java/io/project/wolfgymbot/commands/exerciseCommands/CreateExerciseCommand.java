@@ -23,7 +23,7 @@ public class CreateExerciseCommand implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         String messageText = "Введите название упражнения.";
         telegramExecutor.sendMessage(chatId, messageText, userNickname);
         log.info("Пользователь {} начал создание упражнения", userNickname);

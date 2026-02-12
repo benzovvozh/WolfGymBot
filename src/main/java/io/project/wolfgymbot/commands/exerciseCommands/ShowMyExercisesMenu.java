@@ -5,19 +5,19 @@ import io.project.wolfgymbot.commands.BotCommand;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.keyboard.ExerciseKeyboardFactory;
 import io.project.wolfgymbot.service.ExerciseService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@Slf4j
-public class ShowAllExercisesMenu implements BotCommand {
+public class ShowMyExercisesMenu implements BotCommand {
+
     private final TelegramExecutor telegramExecutor;
     private final ExerciseService exerciseService;
     private final ExerciseKeyboardFactory keyboardFactory;
 
-    public ShowAllExercisesMenu(TelegramExecutor telegramExecutor, ExerciseService exerciseService, ExerciseKeyboardFactory keyboardFactory) {
+    public ShowMyExercisesMenu(TelegramExecutor telegramExecutor, ExerciseService exerciseService,
+                               ExerciseKeyboardFactory keyboardFactory) {
         this.telegramExecutor = telegramExecutor;
         this.exerciseService = exerciseService;
         this.keyboardFactory = keyboardFactory;
@@ -25,12 +25,12 @@ public class ShowAllExercisesMenu implements BotCommand {
 
     @Override
     public String getCommand() {
-        return "💾 All exercises";
+        return "📝 My Exercises";
     }
 
     @Override
     public void execute(Long chatId, String userNickname, Long userId) {
-        List<ExerciseDTO> exercises = exerciseService.getAllExercises();
+        List<ExerciseDTO> exercises = exerciseService.getExercisesByCreatedBy(userId);
         if (exercises.isEmpty()){
             telegramExecutor.sendMessage(chatId, "📝 Упражнений пока нет", userNickname);
         } else {

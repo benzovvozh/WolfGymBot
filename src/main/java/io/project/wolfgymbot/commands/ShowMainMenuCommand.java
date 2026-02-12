@@ -20,7 +20,7 @@ public class ShowMainMenuCommand implements BotCommand {
     }
 
     @Override
-    public void execute(Long chatId, String userNickname) {
+    public void execute(Long chatId, String userNickname, Long userId) {
         String welcomeText = """
                 🏋️‍♂️ Добро пожаловать в WolfGym Bot!
                 

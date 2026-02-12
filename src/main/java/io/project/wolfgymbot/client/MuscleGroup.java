@@ -35,11 +35,13 @@ public enum MuscleGroup {
             throw new IllegalArgumentException("Display name cannot be null");
         }
 
+
         // Очистка ввода и приведение к нижнему регистру
         String cleanedInput = displayName.trim().toLowerCase();
 
         for (MuscleGroup group : values()) {
-            if (group.getDisplayName().toLowerCase().equals(cleanedInput)) {
+            if (group.getDisplayName().toLowerCase().equals(cleanedInput) ||
+                group.name().toLowerCase().equals(cleanedInput)) {
                 return group;
             }
         }

@@ -37,11 +37,17 @@ public class WaitingExerciseConfirmForCreateHandler implements DialogStateHandle
             exerciseRequest.setDescription(draftExercise.getDescription());
             exerciseRequest.setMuscleGroup(draftExercise.getMuscleGroup());
             exerciseRequest.setVideoUrl(draftExercise.getVideoUrl());
+            exerciseRequest.setCreatedBy(userId.toString());
             exerciseService.createExercise(exerciseRequest);
             storage.clear(userId);
             dialogStateService.clearState(chatId);
             String message = "Упражнение успешно создано!";
-            telegramExecutor.sendMessage(chatId,message,userNickname);
+            telegramExecutor.sendMessage(chatId, message, userNickname);
+        } else if (userInput.equalsIgnoreCase("Нет")) {
+            storage.clear(userId);
+            dialogStateService.clearState(chatId);
+            String message = "Вы отменили создание упражнения.";
+            telegramExecutor.sendMessage(chatId, message, userNickname);
         }
     }
 }

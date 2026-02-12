@@ -24,7 +24,7 @@ public class ExerciseKeyboardFactory{
 
         // Ряд с кнопками упражнений
         KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("📝 All Exercises"));     // Все упражнения
+        row1.add(new KeyboardButton("📝 My Exercises"));     // Все упражнения
         row1.add(new KeyboardButton("➕ Create Exercise"));   // Создать упражнение
 
         KeyboardRow row2 = new KeyboardRow();
@@ -34,6 +34,8 @@ public class ExerciseKeyboardFactory{
         // Кнопка возврата в главное меню
         KeyboardRow row3 = new KeyboardRow();
         row3.add(new KeyboardButton("⬅️ Back to Main Menu")); // Назад
+        row3.add(new KeyboardButton("💾 All exercises"));
+
 
         keyboard.add(row1);
         keyboard.add(row2);

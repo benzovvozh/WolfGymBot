@@ -13,4 +13,5 @@ public class ExerciseRequest {
     @NotNull
     private String muscleGroup;
     private String videoUrl;
+    private String createdBy;
 }

@@ -56,6 +56,15 @@ public class WorkoutApiClient {
                 .block();
     }
 
+    public List<ExerciseDTO> getExercisesByUserId(Long userId) {
+        return webClient.get()
+                .uri(EX_PATH + "?createdBy=" + userId.toString())
+                .retrieve()
+                .bodyToFlux(ExerciseDTO.class)
+                .collectList()
+                .block();
+    }
+
     public ExerciseDTO getExerciseByName(String name) {
         return webClient.get()
                 .uri(EX_PATH + "/search" + "?name=" + name)
@@ -73,7 +82,8 @@ public class WorkoutApiClient {
                 .collectList()
                 .block();
     }
-    public ExerciseDTO createExercise(ExerciseRequest exerciseRequest){
+
+    public ExerciseDTO createExercise(ExerciseRequest exerciseRequest) {
         log.info("WorkoutApiClient -> createExercise -> отправка запроса на создание упражнения {}",
                 exerciseRequest.getName());
         ExerciseDTO exerciseDTO = webClient.post()
