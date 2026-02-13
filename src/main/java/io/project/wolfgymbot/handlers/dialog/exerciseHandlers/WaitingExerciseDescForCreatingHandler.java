@@ -1,8 +1,9 @@
-package io.project.wolfgymbot.handlers.dialog;
+package io.project.wolfgymbot.handlers.dialog.exerciseHandlers;
 
 import io.project.wolfgymbot.client.dto.exercise.DraftExercise;
 import io.project.wolfgymbot.client.dto.exercise.MapDraftExerciseStorage;
 import io.project.wolfgymbot.exception.TelegramExecutor;
+import io.project.wolfgymbot.handlers.dialog.DialogStateHandler;
 import io.project.wolfgymbot.service.DialogState;
 import io.project.wolfgymbot.service.DialogStateService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class WaitingExerciseDescForCreatingHandler implements DialogStateHandler
         DraftExercise draftExercise = storage.get(userId);
         draftExercise.setDescription(userInput);
         storage.save(userId, draftExercise);
-        dialogStateService.CreateExerciseWaitMuscleGroup(chatId);
+        dialogStateService.createExerciseWaitMuscleGroup(chatId);
         String message = "Введите группу мышц упражнения:\n\n- Грудь \n- Руки \n- Спина \n- Ноги \n- Плечи" +
                          "\n- Пресс \n- Кардио \n- Все тело";
         telegramExecutor.sendMessage(chatId, message,userNickname);

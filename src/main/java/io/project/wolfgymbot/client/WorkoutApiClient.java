@@ -65,6 +65,15 @@ public class WorkoutApiClient {
                 .block();
     }
 
+    public ExerciseDTO getExerciseById(Long id) {
+        return webClient.get()
+                .uri(EX_PATH +"/"+id)
+                .retrieve()
+                .bodyToMono(ExerciseDTO.class)
+                .block();
+
+    }
+
     public ExerciseDTO getExerciseByName(String name) {
         return webClient.get()
                 .uri(EX_PATH + "/search" + "?name=" + name)

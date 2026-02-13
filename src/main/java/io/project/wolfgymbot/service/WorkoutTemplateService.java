@@ -1,6 +1,7 @@
 package io.project.wolfgymbot.service;
 
 import io.project.wolfgymbot.client.WorkoutApiClient;
+import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import io.project.wolfgymbot.client.dto.template.WorkoutTemplateDTO;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import io.project.wolfgymbot.keyboard.ExerciseKeyboardFactory;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,7 +20,7 @@ public class WorkoutTemplateService {
     private final TelegramExecutor telegramExecutor;
 
     public List<WorkoutTemplateDTO> getAllTemplates() {
-        log.info("Поиск всех упражнений, метод getAllTemplates -> WorkoutTemplateService");
+        log.info("Поиск всех шаблонов, метод getAllTemplates -> WorkoutTemplateService");
         return apiClient.getWorkoutTemplates();
     }
 
@@ -40,8 +42,11 @@ public class WorkoutTemplateService {
             } else {
                 // Форматируем детальную информацию об упражнении
                 log.info("Шаблон {} найден", templateName);
-                String templateDetails = formatTemplateDetails(templateDTO);
-                var keyboard = ExerciseKeyboardFactory.createExercisesInlineKeyboard(templateDTO.getExercises());
+                var exerciseList = templateDTO.getExercisesIds().stream()
+                        .map(id -> apiClient.getExerciseById(id))
+                        .toList();
+                String templateDetails = formatTemplateDetails(templateDTO, exerciseList);
+                var keyboard = ExerciseKeyboardFactory.createExercisesInlineKeyboard(exerciseList);
                 telegramExecutor.sendMessage(chatId, templateDetails, userNickname, keyboard);
 
             }
@@ -52,14 +57,14 @@ public class WorkoutTemplateService {
         }
     }
 
-    public String formatTemplateDetails(WorkoutTemplateDTO templateDTO) {
+    public String formatTemplateDetails(WorkoutTemplateDTO templateDTO, List<ExerciseDTO> exerciseDTOS) {
         StringBuilder sb = new StringBuilder();
         sb.append("🏋️ <b>").append(templateDTO.getName()).append("</b>\n\n");  // Название упражнения
 
         if (templateDTO.getDescription() != null && !templateDTO.getDescription().isEmpty()) {
             sb.append("📝 ").append(templateDTO.getDescription()).append("\n\n");  // Описание
         }
-        if (templateDTO.getExercises() != null && !templateDTO.getExercises().isEmpty()) {
+        if (exerciseDTOS != null && !exerciseDTOS.isEmpty()) {
             sb.append("📃 Список упражнений:\n\n").append("\n\n"); // Список упражнений
         }
         return sb.toString();  // Возвращаем отформатированную строку

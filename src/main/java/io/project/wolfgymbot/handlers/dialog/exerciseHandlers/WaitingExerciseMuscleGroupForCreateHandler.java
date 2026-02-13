@@ -1,8 +1,10 @@
-package io.project.wolfgymbot.handlers.dialog;
+package io.project.wolfgymbot.handlers.dialog.exerciseHandlers;
 
+import io.project.wolfgymbot.client.MuscleGroup;
 import io.project.wolfgymbot.client.dto.exercise.DraftExercise;
 import io.project.wolfgymbot.client.dto.exercise.MapDraftExerciseStorage;
 import io.project.wolfgymbot.exception.TelegramExecutor;
+import io.project.wolfgymbot.handlers.dialog.DialogStateHandler;
 import io.project.wolfgymbot.service.DialogState;
 import io.project.wolfgymbot.service.DialogStateService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +12,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class WaitingExerciseVideoUrlForCreateHandler implements  DialogStateHandler{
+public class WaitingExerciseMuscleGroupForCreateHandler implements DialogStateHandler {
     private final MapDraftExerciseStorage storage;
     private final DialogStateService dialogStateService;
     private final TelegramExecutor telegramExecutor;
 
-    public WaitingExerciseVideoUrlForCreateHandler(MapDraftExerciseStorage storage, DialogStateService dialogStateService, TelegramExecutor telegramExecutor) {
+    public WaitingExerciseMuscleGroupForCreateHandler(MapDraftExerciseStorage storage, DialogStateService dialogStateService, TelegramExecutor telegramExecutor) {
         this.storage = storage;
         this.dialogStateService = dialogStateService;
         this.telegramExecutor = telegramExecutor;
@@ -23,19 +25,19 @@ public class WaitingExerciseVideoUrlForCreateHandler implements  DialogStateHand
 
     @Override
     public boolean canHandle(DialogState state) {
-        return state == DialogState.WAITING_EXERCISE_VIDEO_URL;
+        return state == DialogState.WAITING_EXERCISE_MUSCLE_GROUP;
     }
 
     @Override
     public void handle(Long chatId, String userInput, String userNickname, Long userId) {
-        log.info("Ожидание ссылки на видео упражнения, пользователь: {}", userNickname);
+        log.info("Ожидание группы мышц упражнения, пользователь: {}", userNickname);
 
-        log.info("{}, ввел ссылку на видео мышц упражнения: {}", userNickname, userInput);
+        log.info("{}, ввел группу мышц упражнения: {}", userNickname, userInput);
         DraftExercise draftExercise = storage.get(userId);
-        draftExercise.setVideoUrl(userInput);
+        draftExercise.setMuscleGroup(MuscleGroup.fromDisplayName(userInput).name());
         storage.save(userId, draftExercise);
-        dialogStateService.CreateExerciseConfirm(chatId);
-        String message = "Подтвердите создание упражнения да/нет";
+        dialogStateService.createExerciseWaitVideoUrl(chatId);
+        String message = "Введите ссылку для упражнения:";
         telegramExecutor.sendMessage(chatId, message, userNickname);
     }
 }

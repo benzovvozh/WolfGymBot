@@ -1,9 +1,10 @@
-package io.project.wolfgymbot.handlers.dialog;
+package io.project.wolfgymbot.handlers.dialog.exerciseHandlers;
 
 import io.project.wolfgymbot.client.dto.exercise.DraftExercise;
 import io.project.wolfgymbot.client.dto.exercise.ExerciseRequest;
 import io.project.wolfgymbot.client.dto.exercise.MapDraftExerciseStorage;
 import io.project.wolfgymbot.exception.TelegramExecutor;
+import io.project.wolfgymbot.handlers.dialog.DialogStateHandler;
 import io.project.wolfgymbot.service.DialogState;
 import io.project.wolfgymbot.service.DialogStateService;
 import io.project.wolfgymbot.service.ExerciseService;

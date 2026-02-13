@@ -27,6 +27,6 @@ public class CreateExerciseCommand implements BotCommand {
         String messageText = "Введите название упражнения.";
         telegramExecutor.sendMessage(chatId, messageText, userNickname);
         log.info("Пользователь {} начал создание упражнения", userNickname);
-        dialogStateService.CreateExerciseWaitName(chatId);
+        dialogStateService.createExerciseWaitName(chatId);
     }
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class TemplateKeyboardFactory{
+public class TemplateKeyboardFactory {
 
     // Метод для создания меню шаблонов тренировок
     public ReplyKeyboardMarkup createTemplatesMenu() {
@@ -24,13 +24,14 @@ public class TemplateKeyboardFactory{
 
         KeyboardRow row1 = new KeyboardRow();
         row1.add(new KeyboardButton("📋 All Templates"));     // Все шаблоны
-        row1.add(new KeyboardButton("🆕 Create Template"));   // Создать шаблон
+        row1.add(new KeyboardButton("▶️ Start Workout"));   // Начать тренировку
 
         KeyboardRow row2 = new KeyboardRow();
-        row2.add(new KeyboardButton("▶️ Start Workout"));     // Начать тренировку
+        row2.add(new KeyboardButton("💾 My templates"));     // Мои шаблоны
         row2.add(new KeyboardButton("📊 My Workouts"));       // Мои тренировки
 
         KeyboardRow row3 = new KeyboardRow();
+        row3.add(new KeyboardButton("🆕 Create Template")); // Создать шаблон
         row3.add(new KeyboardButton("⬅️ Back to Main Menu")); // Назад
 
         keyboard.add(row1);
@@ -40,6 +41,22 @@ public class TemplateKeyboardFactory{
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;
     }
+
+    public ReplyKeyboardMarkup createTemplatesDescriptionMenu() {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+        keyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(new KeyboardButton("⏭ Пропустить"));
+        row1.add(new KeyboardButton("❌ Отменить создание тренировки"));
+
+        keyboardRows.add(row1);
+        keyboardMarkup.setKeyboard(keyboardRows);
+        return keyboardMarkup;
+    }
+
 
     public InlineKeyboardMarkup createWorkoutTemplatesInlineKeyboard(List<WorkoutTemplateDTO> templates) {
         InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup();
@@ -72,4 +89,5 @@ public class TemplateKeyboardFactory{
         inlineKeyboard.setKeyboard(rows);  // Устанавливаем клавиатуру
         return inlineKeyboard;             // Возвращаем готовую клавиатуру
     }
+
 }

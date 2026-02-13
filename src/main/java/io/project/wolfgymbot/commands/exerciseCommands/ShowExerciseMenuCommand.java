@@ -10,11 +10,9 @@ import org.springframework.stereotype.Component;
 public class ShowExerciseMenuCommand implements BotCommand {
 
     private final TelegramExecutor telegramExecutor;
-    private final ExerciseService exerciseService;
 
-    public ShowExerciseMenuCommand(TelegramExecutor telegramExecutor, ExerciseService exerciseService) {
+    public ShowExerciseMenuCommand(TelegramExecutor telegramExecutor) {
         this.telegramExecutor = telegramExecutor;
-        this.exerciseService = exerciseService;
     }
 
     @Override
@@ -33,7 +31,8 @@ public class ShowExerciseMenuCommand implements BotCommand {
                 🏋️ Управление упражнениями
                 
                 Выберите действие:
-                • 📝 My Exercises - все упражнения
+                • 📝 My Exercises - мои упражнения
+                • 💾 All Exercises - все упражнения
                 • ➕ Create Exercise - создать новое
                 • 💪 By Muscle Group - по группе мышц
                 • 🔍 Search Exercise - поиск упражнения
