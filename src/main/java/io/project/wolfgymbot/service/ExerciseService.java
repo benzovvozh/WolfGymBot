@@ -3,6 +3,7 @@ package io.project.wolfgymbot.service;
 import io.project.wolfgymbot.client.WorkoutApiClient;
 import io.project.wolfgymbot.client.dto.exercise.ExerciseDTO;
 import io.project.wolfgymbot.client.dto.exercise.ExerciseRequest;
+import io.project.wolfgymbot.exception.ApiClientErrorHandler;
 import io.project.wolfgymbot.exception.TelegramExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,24 +18,33 @@ public class ExerciseService {
 
     private final WorkoutApiClient apiClient;
     private final TelegramExecutor telegramExecutor;
+    private final ApiClientErrorHandler errorHandler;
 
     public List<ExerciseDTO> getAllExercises() {
-        return apiClient.getExercises();
+        return errorHandler.executeWithHandling(
+                () -> apiClient.getExercises(), "getAllExercises");
     }
 
-    public ExerciseDTO getExerciseByName(String name) {
-        var exercise = apiClient.getExerciseByName(name);
-        return exercise;
+    public ExerciseDTO getExerciseByName(String exerciseName) {
+        return errorHandler.executeWithHandling(
+                () -> apiClient.getExerciseByName(exerciseName),
+                "getExerciseByName; " + exerciseName);
     }
-    public List<ExerciseDTO> getExercisesByCreatedBy(Long userId){
-        return apiClient.getExercisesByUserId(userId);
+
+    public List<ExerciseDTO> getExercisesByCreatedBy(Long userId) {
+        return errorHandler.executeWithHandling(
+                () -> apiClient.getExercisesByUserId(userId), "getExercisesByCreatedBy: " + userId);
     }
 
     public List<ExerciseDTO> getExercisesByMuscleGroup(String muscleGroup) {
-        return apiClient.getExercisesByMuscleGroup(muscleGroup);
+        return errorHandler.executeWithHandling(
+                () -> apiClient.getExercisesByMuscleGroup(muscleGroup),
+                "getExercisesByMuscleGroup: " + muscleGroup);
     }
-    public ExerciseDTO createExercise(ExerciseRequest exerciseRequest){
-        return apiClient.createExercise(exerciseRequest);
+
+    public ExerciseDTO createExercise(ExerciseRequest exerciseRequest) {
+        return errorHandler.executeWithHandling(() -> apiClient.createExercise(exerciseRequest),
+                "createExercise: " + exerciseRequest);
     }
 
     public void showExerciseDetails(Long chatId, String exerciseName, String userNickname) {
