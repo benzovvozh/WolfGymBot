@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class WaitingWtDescForCreateHandler implements DialogStateHandler {
+public class WaitingWtDescriptionHandler implements DialogStateHandler {
     private final MapDraftWtStorage storage;
     private final DialogStateService dialogStateService;
     private final TelegramExecutor telegramExecutor;
     private final TemplateKeyboardFactory factory;
 
-    public WaitingWtDescForCreateHandler(MapDraftWtStorage storage,
-                                         DialogStateService dialogStateService,
-                                         TelegramExecutor telegramExecutor,
-                                         TemplateKeyboardFactory factory) {
+    public WaitingWtDescriptionHandler(MapDraftWtStorage storage,
+                                       DialogStateService dialogStateService,
+                                       TelegramExecutor telegramExecutor,
+                                       TemplateKeyboardFactory factory) {
         this.storage = storage;
         this.dialogStateService = dialogStateService;
         this.telegramExecutor = telegramExecutor;
@@ -49,8 +49,9 @@ public class WaitingWtDescForCreateHandler implements DialogStateHandler {
             log.info(storage.get(userId).getDescription());
             String message = "Как вы хотите выбрать упражнение?";
 
-            telegramExecutor.sendMessage(chatId, message, userNickname);
-            dialogStateService.createWtWaitExerciseIds(chatId);
+            telegramExecutor.sendMessage(chatId, message, userNickname,
+                    factory.createTemplatesExerciseSelectionOptionMenu());
+            dialogStateService.exerciseSelectionOption(chatId);
         }
     }
 }

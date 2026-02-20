@@ -57,6 +57,41 @@ public class TemplateKeyboardFactory {
         return keyboardMarkup;
     }
 
+    public ReplyKeyboardMarkup createTemplatesCreateMainMenu() {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(new KeyboardButton("➕ Добавить упражнение"));
+        row1.add(new KeyboardButton("📋 Текущий список"));
+
+        KeyboardRow row2 = new KeyboardRow();
+        row2.add(new KeyboardButton("✅ Завершить создание"));
+        row2.add(new KeyboardButton("❌ Отменить создание тренировки"));
+        keyboardRows.add(row1);
+        keyboardRows.add(row2);
+        replyKeyboardMarkup.setKeyboard(keyboardRows);
+        return replyKeyboardMarkup;
+    }
+    public ReplyKeyboardMarkup createTemplatesExerciseSelectionOptionMenu() {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(new KeyboardButton("📋 Показать все"));
+        row1.add(new KeyboardButton("💪 По группе мышц"));
+
+        KeyboardRow row2 = new KeyboardRow();
+        row2.add(new KeyboardButton("❌ Отменить создание тренировки"));
+        keyboardRows.add(row1);
+        keyboardRows.add(row2);
+        replyKeyboardMarkup.setKeyboard(keyboardRows);
+        return replyKeyboardMarkup;
+    }
 
     public InlineKeyboardMarkup createWorkoutTemplatesInlineKeyboard(List<WorkoutTemplateDTO> templates) {
         InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup();

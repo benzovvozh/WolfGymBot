@@ -30,8 +30,6 @@ public class WaitingExerciseMuscleGroupForCreateHandler implements DialogStateHa
 
     @Override
     public void handle(Long chatId, String userInput, String userNickname, Long userId) {
-        log.info("Ожидание группы мышц упражнения, пользователь: {}", userNickname);
-
         log.info("{}, ввел группу мышц упражнения: {}", userNickname, userInput);
         DraftExercise draftExercise = storage.get(userId);
         draftExercise.setMuscleGroup(MuscleGroup.fromDisplayName(userInput).name());

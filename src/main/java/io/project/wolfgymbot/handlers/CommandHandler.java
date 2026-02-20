@@ -19,7 +19,8 @@ public class CommandHandler {
     private final DialogStateHandlerRegistry dialogStateHandlerRegistry;
     private final DialogStateService dialogStateService;
 
-    public CommandHandler(CommandRegistry commandRegistry, DialogStateHandlerRegistry dialogStateHandlerRegistry,
+    public CommandHandler(CommandRegistry commandRegistry,
+                          DialogStateHandlerRegistry dialogStateHandlerRegistry,
                           DialogStateService dialogStateService) {
         this.commandRegistry = commandRegistry;
         this.dialogStateHandlerRegistry = dialogStateHandlerRegistry;

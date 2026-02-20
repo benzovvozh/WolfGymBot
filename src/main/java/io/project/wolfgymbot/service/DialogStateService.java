@@ -60,10 +60,16 @@ public class DialogStateService {
     public void createWtWaitExerciseIds(Long chatId) {
         userStates.put(chatId, DialogState.WAITING_WT_EXERCISES);
     }
-    public void cancelWtCreate(Long chatId){
+
+    public void cancelWtCreate(Long chatId) {
         userStates.put(chatId, DialogState.CANCEL_WT_CREATE);
     }
-    public  void  skipWtDescCreate(Long chatId){
+
+    public void skipWtDescCreate(Long chatId) {
         userStates.put(chatId, DialogState.SKIP_WT_DESC);
+    }
+
+    public void exerciseSelectionOption(Long chatId) {
+        userStates.put(chatId, DialogState.WAITING_WT_SELECTION_OPTION);
     }
 }
