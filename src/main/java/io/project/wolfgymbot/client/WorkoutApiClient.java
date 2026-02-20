@@ -5,7 +5,6 @@ import io.project.wolfgymbot.client.dto.exercise.ExerciseRequest;
 import io.project.wolfgymbot.client.dto.template.WorkoutTemplateDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
