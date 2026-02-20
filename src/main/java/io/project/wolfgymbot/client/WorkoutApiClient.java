@@ -27,7 +27,7 @@ public class WorkoutApiClient {
                 .retrieve()
                 .bodyToFlux(WorkoutTemplateDTO.class)
                 .collectList()
-                .block();
+                .block(Duration.ofSeconds(5));
     }
 
     public WorkoutTemplateDTO getWorkoutTemplateById(Long id) {
@@ -35,7 +35,7 @@ public class WorkoutApiClient {
                 .uri(WT_PATH + id)
                 .retrieve()
                 .bodyToMono(WorkoutTemplateDTO.class)
-                .block();
+                .block(Duration.ofSeconds(5));
     }
 
     public WorkoutTemplateDTO getWorkoutTemplateByName(String name) {
@@ -43,7 +43,7 @@ public class WorkoutApiClient {
                 .uri(WT_PATH + "/search" + "?name=" + name)
                 .retrieve()
                 .bodyToMono(WorkoutTemplateDTO.class)
-                .block();
+                .block(Duration.ofSeconds(5));
         return result;
     }
 
@@ -53,7 +53,7 @@ public class WorkoutApiClient {
                 .retrieve()
                 .bodyToFlux(ExerciseDTO.class)
                 .collectList()
-                .block();
+                .block(Duration.ofSeconds(5));
     }
 
     public List<ExerciseDTO> getExercisesByUserId(Long userId) {
@@ -62,7 +62,7 @@ public class WorkoutApiClient {
                 .retrieve()
                 .bodyToFlux(ExerciseDTO.class)
                 .collectList()
-                .block();
+                .block(Duration.ofSeconds(5));
     }
 
     public ExerciseDTO getExerciseById(Long id) {
@@ -70,7 +70,7 @@ public class WorkoutApiClient {
                 .uri(EX_PATH +"/"+id)
                 .retrieve()
                 .bodyToMono(ExerciseDTO.class)
-                .block();
+                .block(Duration.ofSeconds(5));
 
     }
 
@@ -79,7 +79,7 @@ public class WorkoutApiClient {
                 .uri(EX_PATH + "/search" + "?name=" + name)
                 .retrieve()
                 .bodyToMono(ExerciseDTO.class)
-                .block();
+                .block(Duration.ofSeconds(5));
 
     }
 
@@ -89,7 +89,7 @@ public class WorkoutApiClient {
                 .retrieve()
                 .bodyToFlux(ExerciseDTO.class)
                 .collectList()
-                .block();
+                .block(Duration.ofSeconds(5));
     }
 
     public ExerciseDTO createExercise(ExerciseRequest exerciseRequest) {
@@ -101,7 +101,7 @@ public class WorkoutApiClient {
                 .bodyValue(exerciseRequest)
                 .retrieve()
                 .bodyToMono(ExerciseDTO.class)
-                .block(Duration.ofSeconds(10));
+                .block(Duration.ofSeconds(5));
         return exerciseDTO;
     }
 }

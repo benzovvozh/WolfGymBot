@@ -1,6 +1,5 @@
 package io.project.wolfgymbot.configuration;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.project.wolfgymbot.bot.WolfGymBot;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
