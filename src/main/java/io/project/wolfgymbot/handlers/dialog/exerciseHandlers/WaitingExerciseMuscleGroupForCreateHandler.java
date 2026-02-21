@@ -31,11 +31,19 @@ public class WaitingExerciseMuscleGroupForCreateHandler implements DialogStateHa
     @Override
     public void handle(Long chatId, String userInput, String userNickname, Long userId) {
         log.info("{}, ввел группу мышц упражнения: {}", userNickname, userInput);
-        DraftExercise draftExercise = storage.get(userId);
-        draftExercise.setMuscleGroup(MuscleGroup.fromDisplayName(userInput).name());
-        storage.save(userId, draftExercise);
-        dialogStateService.createExerciseWaitVideoUrl(chatId);
-        String message = "Введите ссылку для упражнения:";
-        telegramExecutor.sendMessage(chatId, message, userNickname);
+        if (userInput == null || userInput.isEmpty() || userInput.equals("null")) {
+            String message = "Вы ввели некорректную группу мышц, попробуйте снова\n" +
+                             "Введите группу мышц упражнения:\n\n- Грудь \n- Руки \n- Спина \n- Ноги \n- Плечи" +
+                             "\n- Пресс \n- Кардио \n- Все тело";
+            dialogStateService.createExerciseWaitMuscleGroup(chatId);
+            telegramExecutor.sendMessage(chatId, message, userNickname);
+        } else {
+            DraftExercise draftExercise = storage.get(userId);
+            draftExercise.setMuscleGroup(MuscleGroup.fromDisplayName(userInput).name());
+            storage.save(userId, draftExercise);
+            dialogStateService.createExerciseWaitVideoUrl(chatId);
+            String message = "Введите ссылку для упражнения:";
+            telegramExecutor.sendMessage(chatId, message, userNickname);
+        }
     }
 }
